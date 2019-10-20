@@ -1,0 +1,65 @@
+#!/usr/bin/env node
+
+const fs = require('fs')
+const path = require('path')
+const yargs = require('yargs')
+const globby = require('globby')
+const groupResultsByRule = require('./src/group-results-by-rule')
+const toEarlReport = require('./src/to-earl-report')
+const loadJson = require('./src/load-json')
+
+const inputDefault = './axe-pro-exports/**/*.json'
+
+const argv = yargs.usage('Usage: $0 -input reports/**.json --output earl-report.json')
+  .option('input', {
+    alias: 'i',
+    default: inputDefault,
+    array: true
+  })
+  .option('outDir', {
+    alias: 'o',
+    default: './reports/'
+  })
+  .option('testcases', {
+    alias: 't',
+    default: 'https://act-rules.github.io/testcases.json'
+  })
+  .help('help')
+  .alias('help', 'h')
+  .alias('version', 'v')
+  .argv;
+
+// Little work-around so that the default shows up as a globby, instead of listing out
+//  each JSON file individually
+if (argv.input === inputDefault) {
+  argv.input = globby.sync(inputDefault)
+}
+
+async function main ({ input, outDir, testcases }) {
+  const testCasesJson = await loadJson(testcases)
+
+  // Ensure the output dir exists
+  const resolvedOutDir = path.resolve(outDir)
+  if (!fs.existsSync(resolvedOutDir)) {
+    fs.mkdirSync(resolvedOutDir)
+  }
+
+  // Group results by rule, so that we can figure out what rules ran
+  const ruleResultSets = groupResultsByRule(input, testCasesJson)
+
+  // Loop over each rule
+  Object.entries(ruleResultSets).forEach(([ruleId, ruleResults]) => {
+    const earlReport = toEarlReport(ruleResults)
+    const reportPath = path.resolve(resolvedOutDir, `${ruleId}-earl-report.json`)
+    const reportString = JSON.stringify(earlReport, null, 2)
+
+    // Save the report
+    fs.writeFileSync(reportPath, reportString, 'utf8')
+    console.log(`Created '${reportPath}'`)
+  })
+}
+
+main(argv).catch(err => {
+  console.error(err)
+  process.exit(1)
+})

@@ -1,0 +1,25 @@
+{
+  "name": "act-rules-implementation-axe-pro",
+  "version": "0.1.0",
+  "description": "ACT-R implementation data for axe Pro",
+  "main": "axe-pro-earl",
+  "scripts": {
+    "build": "node axe-pro-earl"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/act-rules/act-rules-implementation-axe-pro.git"
+  },
+  "keywords": [],
+  "author": "Wilco Fiers",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/act-rules/act-rules-implementation-axe-pro/issues"
+  },
+  "homepage": "https://github.com/act-rules/act-rules-implementation-axe-pro#readme",
+  "dependencies": {
+    "globby": "^10.0.1",
+    "request": "^2.88.0",
+    "yargs": "^14.2.0"
+  }
+}
