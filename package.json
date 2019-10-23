@@ -4,7 +4,10 @@
   "description": "ACT-R implementation data for axe Pro",
   "main": "axe-pro-earl",
   "scripts": {
-    "build": "node axe-pro-earl"
+    "post-install": "rm -rf .tmp && mkdir .tmp && curl https://act-rules.github.io/testcases.json --output .tmp/testcases.json",
+    "build:earl": "node axe-pro-earl --testcases .tmp/testcases.json",
+    "build:mapping": "act-map-generator --organisation 'Deque' --tool 'axe Pro' --jsonReports './reports/*.json' --testcases '.tmp/testcases.json' --output './axe-pro-mapping.json'",
+    "build": "npm run build:earl && npm run build:mapping"
   },
   "repository": {
     "type": "git",
@@ -18,6 +21,7 @@
   },
   "homepage": "https://github.com/act-rules/act-rules-implementation-axe-pro#readme",
   "dependencies": {
+    "act-rules-implementation-mapper": "act-rules/act-rules-implementation-mapper",
     "globby": "^10.0.1",
     "request": "^2.88.0",
     "yargs": "^14.2.0"

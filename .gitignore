@@ -1,5 +1,6 @@
 node_modules
-earl-report.json
 .DS_Store
 *.log
-reports
+reports/*.json
+.tmp
+axe-pro-mapping.json

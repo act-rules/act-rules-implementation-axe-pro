@@ -31,7 +31,7 @@ const argv = yargs.usage('Usage: $0 -input reports/**.json --output earl-report.
 
 // Little work-around so that the default shows up as a globby, instead of listing out
 //  each JSON file individually
-if (argv.input === inputDefault) {
+if (argv.input.length === 1 && argv.input[0] === inputDefault) {
   argv.input = globby.sync(inputDefault)
 }
 
