@@ -6,6 +6,10 @@
   ],
   "name": "Axe DevTools Pro",
   "shortdesc": "Inteligent Guided Testing",
+  "release": {
+    "@type": "Version",
+    "revision": "4.23.0"
+  },
   "assertedThat": [
     {
       "@type": "Assertion",
